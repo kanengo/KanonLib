@@ -1,7 +1,6 @@
 #include "Socket.h"
 
 
-
 Socket Socket::socket(int protofamily = AF_INET, int type = SOCK_STREAM, int protocol = 0) {
 	int sockfd = ::socket(protofamily, type, protocol);
 	if (sockfd <= 0) {
@@ -33,7 +32,9 @@ bool Socket::bind(const int port)
 	ai_hints.ai_protocol = IPPROTO_TCP;
 	ai_hints.ai_socktype = SOCK_STREAM;
 	ai_hints.ai_flags = AI_PASSIVE;
-	if (getaddrinfo("0.0.0.0", std::to_string(port).c_str, &ai_hints, &ai_res) != 0) {
+	char strPort[6];
+	sprintf(strPort, "%d", port);
+	if (getaddrinfo("0.0.0.0", strPort, &ai_hints, &ai_res) != 0) {
 		throw Socket::SocketException("function 'getaddrinfo' error:" + std::string(strerror(errno)));
 	}
 	if (::bind(sock_fd, ai_res->ai_addr, sizeof(sockaddr)) != 0) {
@@ -67,10 +68,10 @@ bool Socket::setblocking(const bool isBlock)
 
 bool Socket::connect(const std::string host, const int port)
 {
-
+	return false;;
 }
 
-SockConn Socket::accept()
+Socket Socket::accept()
 {
 	sockaddr_in client_addr;
 	socklen_t socklen = static_cast<socklen_t>(sizeof(sockaddr));
@@ -78,11 +79,11 @@ SockConn Socket::accept()
 	if (client_fd == -1) {
 		throw Socket::SocketException("socket accept error:" + std::string(strerror(errno)));
 	}
-	Socket s(client_fd);
+
 	InetAddr addr(client_addr);
-
-	return SockConn(s, addr);
-
+	Socket s(client_fd, addr);
+	
+	return s;
 }
 
 bool Socket::close()

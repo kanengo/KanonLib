@@ -65,11 +65,13 @@
     <ClCompile Include="netLib\Epoll.cpp" />
     <ClCompile Include="netLib\InetAddr.cpp" />
     <ClCompile Include="netLib\Socket.cpp" />
+    <ClCompile Include="netLib\SocketChannel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="netLib\Epoll.h" />
     <ClInclude Include="netLib\InetAddr.h" />
     <ClInclude Include="netLib\Socket.h" />
+    <ClInclude Include="netLib\SocketChannel.h" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -12,22 +12,12 @@
 #include <netinet/in.h>
 #include "InetAddr.h"
 
-class Socket;
-class SockConn {
-public:
-	SockConn(Socket &sock, InetAddr &addr) :_sock(sock), _inetAddr(addr) {};
-
-private:
-	Socket _sock;
-	InetAddr _inetAddr;
-};
-
 class Socket
 {
 public:
 	class SocketException;
 	Socket(int sockfd) :sock_fd(sockfd) {};
-
+	Socket(int sockfd, InetAddr &addr) :sock_fd(sockfd), _addr(addr) {};
 	Socket socket(int protofamily, int type, int protocol);
 	void setsockopt(int level, int optname, int optval);
 	void setsockopt(int level, int optname, const void *optval, socklen_t optsize);
@@ -35,7 +25,7 @@ public:
 	bool listen(const int maxListenNum);
 	bool setblocking(const bool isBlock);
 	bool connect(const std::string host, const int port);
-	SockConn accept();
+	Socket accept();
 	bool close();
 	~Socket();
 
@@ -56,5 +46,6 @@ public:
 private:
 	bool isVaild();
 	int sock_fd;
+	InetAddr _addr;
 };
 
