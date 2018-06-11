@@ -25,6 +25,7 @@ public:
 	bool listen(const int maxListenNum);
 	bool setblocking(const bool isBlock);
 	bool connect(const std::string host, const int port);
+	ssize_t recv(void* buf, size_t sz, int flag);
 	InetAddr getInetAddr();
 	Socket accept();
 	bool close();

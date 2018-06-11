@@ -71,6 +71,30 @@ bool Socket::connect(const std::string host, const int port)
 	return false;;
 }
 
+ssize_t Socket::recv(void * buf, size_t sz, int flag = 0)
+{
+	size_t left = sz;
+	ssize_t nread = 0;
+	char* p = static_cast<char *>(buf);
+	while (left > 0) {
+		nread = ::recv(sock_fd, p, left, flag);
+		if (nread == 0) {
+			break;
+		}
+		else if (nread < 0) {
+			if (errno == EINTR)
+				continue;
+			return -1;
+		}
+		else {
+			left -= nread;
+			p += nread;
+		}
+	}
+	
+	return sz - left;
+}
+
 InetAddr Socket::getInetAddr()
 {
 	return _addr;
