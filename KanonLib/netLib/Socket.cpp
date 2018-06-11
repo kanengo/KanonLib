@@ -71,6 +71,11 @@ bool Socket::connect(const std::string host, const int port)
 	return false;;
 }
 
+InetAddr Socket::getInetAddr()
+{
+	return _addr;
+}
+
 Socket Socket::accept()
 {
 	sockaddr_in client_addr;

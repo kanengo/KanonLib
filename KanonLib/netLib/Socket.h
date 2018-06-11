@@ -18,13 +18,14 @@ public:
 	class SocketException;
 	Socket(int sockfd) :sock_fd(sockfd) {};
 	Socket(int sockfd, InetAddr &addr) :sock_fd(sockfd), _addr(addr) {};
-	Socket socket(int protofamily, int type, int protocol);
+	static Socket socket(int protofamily, int type, int protocol);
 	void setsockopt(int level, int optname, int optval);
 	void setsockopt(int level, int optname, const void *optval, socklen_t optsize);
 	bool bind(const int port);
 	bool listen(const int maxListenNum);
 	bool setblocking(const bool isBlock);
 	bool connect(const std::string host, const int port);
+	InetAddr getInetAddr();
 	Socket accept();
 	bool close();
 	~Socket();
