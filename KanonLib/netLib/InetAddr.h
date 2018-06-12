@@ -6,7 +6,7 @@
 class InetAddr
 {
 public:
-	InetAddr() :_ip("0.0.0.0"), _port(0) {};
+	InetAddr() {};
 	InetAddr(std::string &ip, int port);
 	InetAddr(const sockaddr_in &addr);
 	std::string getIp() const;

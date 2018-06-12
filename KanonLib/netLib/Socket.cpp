@@ -24,7 +24,7 @@ void Socket::setsockopt(int level, int optname, const void *optval, socklen_t op
 	}
 }
 
-bool Socket::bind(const int port)
+bool Socket::bind(const uint16_t port)
 {
 	addrinfo ai_hints;
 	addrinfo *ai_res = nullptr;
@@ -32,9 +32,9 @@ bool Socket::bind(const int port)
 	ai_hints.ai_protocol = IPPROTO_TCP;
 	ai_hints.ai_socktype = SOCK_STREAM;
 	ai_hints.ai_flags = AI_PASSIVE;
-	char strPort[6];
-	sprintf(strPort, "%d", port);
-	if (getaddrinfo("0.0.0.0", strPort, &ai_hints, &ai_res) != 0) {
+	//char strPort[6];
+	//sprintf(strPort, "%d", port);
+	if (getaddrinfo("0.0.0.0", std::to_string(port).c_str(), &ai_hints, &ai_res) != 0) {
 		throw Socket::SocketException("function 'getaddrinfo' error:" + std::string(strerror(errno)));
 	}
 	if (::bind(sock_fd, ai_res->ai_addr, sizeof(sockaddr)) != 0) {
@@ -66,38 +66,48 @@ bool Socket::setblocking(const bool isBlock)
 	return true;
 }
 
-bool Socket::connect(const std::string host, const int port)
-{
-	return false;;
+bool Socket::connect(const std::string host, const uint16_t port)
+{	
+	sockaddr_in serveraddr;
+	serveraddr.sin_family = AF_INET;
+	serveraddr.sin_port = htons(port);
+	inet_pton(AF_INET, host.c_str(), &serveraddr.sin_addr);
+	if (::connect(sock_fd, (sockaddr*)&serveraddr, sizeof(serveraddr)) == -1) {
+		throw Socket::SocketException("socket connect error:" + std::string(strerror(errno)));
+	}
+	return true;
 }
 
 ssize_t Socket::recv(void * buf, size_t sz, int flag = 0)
 {
-	size_t left = sz;
-	ssize_t nread = 0;
-	char* p = static_cast<char *>(buf);
-	while (left > 0) {
-		nread = ::recv(sock_fd, p, left, flag);
-		if (nread == 0) {
-			break;
-		}
-		else if (nread < 0) {
-			if (errno == EINTR)
-				continue;
-			return -1;
-		}
-		else {
-			left -= nread;
-			p += nread;
-		}
-	}
+	//size_t left = sz;
+	//ssize_t nread = 0;
+	//char* p = static_cast<char *>(buf);
+	//while (left > 0) {
+	//	nread = ::recv(sock_fd, p, left, flag);
+	//	if (nread == 0) {
+	//		break;
+	//	}
+	//	else if (nread < 0) {
+	//		if (errno == EINTR)
+	//			continue;
+	//		return -1;
+	//	}
+	//	else {
+	//		left -= nread;
+	//		p += nread;
+	//	}
+	//}
+	//
+	//return sz - left;
+	ssize_t nread = ::recv(sock_fd, buf, sz, flag);
+	return nread;
 	
-	return sz - left;
 }
 
-InetAddr Socket::getInetAddr()
+ssize_t Socket::send(const void * buf, size_t len, int flag = 0)
 {
-	return _addr;
+	return ::send(sock_fd, buf, len, flag);
 }
 
 Socket Socket::accept()
@@ -109,9 +119,7 @@ Socket Socket::accept()
 		throw Socket::SocketException("socket accept error:" + std::string(strerror(errno)));
 	}
 
-	InetAddr addr(client_addr);
-	Socket s(client_fd, addr);
-	
+	Socket s(client_fd);
 	return s;
 }
 
@@ -123,6 +131,11 @@ bool Socket::close()
 		return false;
 	sock_fd = -1;
 	return true;
+}
+
+int Socket::getFd() const
+{
+	return sock_fd;
 }
 
 
