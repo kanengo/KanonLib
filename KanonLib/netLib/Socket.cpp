@@ -4,7 +4,7 @@
 Socket Socket::socket(int protofamily = AF_INET, int type = SOCK_STREAM, int protocol = 0) {
 	int sockfd = ::socket(protofamily, type, protocol);
 	if (sockfd <= 0) {
-		throw Socket::SocketException("create socket error:" + std::string(strerror(errno)));
+		throw SocketException("create socket error:" + std::string(strerror(errno)));
 	}
 	
 	return Socket(sockfd);
@@ -13,14 +13,14 @@ Socket Socket::socket(int protofamily = AF_INET, int type = SOCK_STREAM, int pro
 void Socket::setsockopt(int level, int optname, int optval)
 {
 	if (::setsockopt(sock_fd, level, optname, &optval, static_cast<socklen_t>(sizeof(optval))) == -1) {
-		throw Socket::SocketException("socket setsockopt error:" + std::string(strerror(errno)));
+		throw SocketException("socket setsockopt error:" + std::string(strerror(errno)));
 	}
 }
 
 void Socket::setsockopt(int level, int optname, const void *optval, socklen_t optsize)
 {
 	if (::setsockopt(sock_fd, level, optname, optval, optsize) == -1) {
-		throw Socket::SocketException("socket setsockopt error:" + std::string(strerror(errno)));
+		throw SocketException("socket setsockopt error:" + std::string(strerror(errno)));
 	}
 }
 
@@ -35,10 +35,10 @@ bool Socket::bind(const uint16_t port)
 	//char strPort[6];
 	//sprintf(strPort, "%d", port);
 	if (getaddrinfo("0.0.0.0", std::to_string(port).c_str(), &ai_hints, &ai_res) != 0) {
-		throw Socket::SocketException("function 'getaddrinfo' error:" + std::string(strerror(errno)));
+		throw SocketException("function 'getaddrinfo' error:" + std::string(strerror(errno)));
 	}
 	if (::bind(sock_fd, ai_res->ai_addr, sizeof(sockaddr)) != 0) {
-		throw Socket::SocketException("socket bind error:" + std::string(strerror(errno)));
+		throw SocketException("socket bind error:" + std::string(strerror(errno)));
 	}
 
 	return true;
@@ -47,7 +47,7 @@ bool Socket::bind(const uint16_t port)
 bool Socket::listen(const int maxListenNum)
 {
 	if (::listen(sock_fd, maxListenNum) != 0) {
-		throw Socket::SocketException("socket listen error:" + std::string(strerror(errno)));
+		throw SocketException("socket listen error:" + std::string(strerror(errno)));
 	}
 	return true;
 }
@@ -60,7 +60,7 @@ bool Socket::setblocking(const bool isBlock)
 	else
 		flag &= O_NONBLOCK;
 	if (fcntl(sock_fd, F_SETFL, flag) == -1) {
-		throw Socket::SocketException("set socket blocking error:" + std::string(strerror(errno)));
+		throw SocketException("set socket blocking error:" + std::string(strerror(errno)));
 	}
 
 	return true;
@@ -73,7 +73,7 @@ bool Socket::connect(const std::string host, const uint16_t port)
 	serveraddr.sin_port = htons(port);
 	inet_pton(AF_INET, host.c_str(), &serveraddr.sin_addr);
 	if (::connect(sock_fd, (sockaddr*)&serveraddr, sizeof(serveraddr)) == -1) {
-		throw Socket::SocketException("socket connect error:" + std::string(strerror(errno)));
+		throw SocketException("socket connect error:" + std::string(strerror(errno)));
 	}
 	return true;
 }
@@ -116,7 +116,7 @@ Socket Socket::accept()
 	socklen_t socklen = static_cast<socklen_t>(sizeof(sockaddr));
 	int client_fd = ::accept(sock_fd, (sockaddr*)&client_addr, &socklen);
 	if (client_fd == -1) {
-		throw Socket::SocketException("socket accept error:" + std::string(strerror(errno)));
+		throw SocketException("socket accept error:" + std::string(strerror(errno)));
 	}
 
 	Socket s(client_fd);
