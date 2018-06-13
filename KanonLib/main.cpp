@@ -7,18 +7,18 @@ int main()
 {	
 	try {
 		Socket s = Socket::socket(AF_INET, SOCK_STREAM, 0);
-		/*s.bind(54167);
+		s.bind(54167);
 		s.listen(1024);
 		
 		while (true) {
 			Socket sc = s.accept();
 			std::cout << "accept!!!" << std::endl;
-		}*/
-		s.connect("127.0.0.1", 13003);
+		}
+		/*s.connect("127.0.0.1", 13003);
 		cout << "connect success" << endl;
-		while (true);
+		while (true);*/
 	}
-	catch (Socket::SocketException &e) {
+	catch (SocketException &e) {
 		std::cout << e.description() << std::endl;
 	}
     return 0;
