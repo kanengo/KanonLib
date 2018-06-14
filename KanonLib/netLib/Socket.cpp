@@ -110,11 +110,10 @@ ssize_t Socket::send(const void * buf, size_t len, int flag = 0)
 	return ::send(sock_fd, buf, len, flag);
 }
 
-Socket Socket::accept()
+Socket Socket::accept(sockaddr_in* clientaddr = nullptr)
 {
-	sockaddr_in client_addr;
 	socklen_t socklen = static_cast<socklen_t>(sizeof(sockaddr));
-	int client_fd = ::accept(sock_fd, (sockaddr*)&client_addr, &socklen);
+	int client_fd = ::accept(sock_fd, (sockaddr*)clientaddr, &socklen);
 	if (client_fd == -1) {
 		throw SocketException("socket accept error:" + std::string(strerror(errno)));
 	}

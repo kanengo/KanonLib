@@ -26,7 +26,7 @@ public:
 	bool connect(const std::string host, const uint16_t port);
 	ssize_t recv(void* buf, size_t len, int flag);
 	ssize_t send(const void *buf, size_t len, int flag);
-	Socket accept();
+	Socket accept(sockaddr_in* clientaddr);
 	bool close();
 	int getFd() const;
 	~Socket();

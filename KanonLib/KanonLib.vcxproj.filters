@@ -13,5 +13,6 @@
     <ClInclude Include="netLib\Socket.h" />
     <ClInclude Include="netLib\SocketChannel.h" />
     <ClInclude Include="netLib\SocketException.h" />
+    <ClInclude Include="netLib\PollData.h" />
   </ItemGroup>
 </Project>

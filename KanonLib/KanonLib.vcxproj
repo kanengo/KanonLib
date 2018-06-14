@@ -70,6 +70,7 @@
   <ItemGroup>
     <ClInclude Include="netLib\Epoll.h" />
     <ClInclude Include="netLib\InetAddr.h" />
+    <ClInclude Include="netLib\PollData.h" />
     <ClInclude Include="netLib\Socket.h" />
     <ClInclude Include="netLib\SocketChannel.h" />
     <ClInclude Include="netLib\SocketException.h" />
