@@ -10,25 +10,30 @@ Epoll::Epoll()
 	}
 }
 
-void Epoll::addEvent(int fd, epoll_event * event)
+void Epoll::del(int fd)
+{
+	if (epoll_ctl(_efd, EPOLL_CTL_ADD, fd, nullptr) == -1) {
+		throw SocketException("epoll addEvent error:" + std::string(strerror(errno)));
+	}
+}
+
+void Epoll::add(int fd, epoll_event * event)
 {
 	if (epoll_ctl(_efd, EPOLL_CTL_ADD, fd, event) == -1) {
 		throw SocketException("epoll addEvent error:" + std::string(strerror(errno)));
 	}
 }
 
-void Epoll::modEvent(int fd, epoll_event * event)
+void Epoll::mod(int fd, epoll_event * event)
 {
 	if (epoll_ctl(_efd, EPOLL_CTL_MOD, fd, event) == -1) {
-		throw SocketException("epoll addEvent error:" + std:	:string(strerror(errno)));
+		throw SocketException("epoll addEvent error:" + std::string(strerror(errno)));
 	}
 }
 
-void Epoll::delEvent(int fd, epoll_event * event)
+void Epoll::wait(epoll_event * events, int maxevents, int timeout = -1)
 {
-	if (epoll_ctl(_efd, EPOLL_CTL_DEL, fd, event) == -1) {
-		throw SocketException("epoll addEvent error:" + std::string(strerror(errno)));
-	}
+	::epoll_wait(_efd, events, maxevents, timeout);
 }
 
 void Epoll::addAcceptFd(int fd)
