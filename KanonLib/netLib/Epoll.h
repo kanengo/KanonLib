@@ -10,7 +10,7 @@
 #include <functional>
 
 #include "SocketException.h"
-#include "PollData.h"
+#include "SocketData.h"
 #include "Socket.h"
 #include "InetAddr.h"
 #include "SocketChannel.h"
@@ -25,7 +25,7 @@ public:
 	void del(int fd);
 	int wait(epEvent *events, int maxevents, int timeout);
 
-	void addAcceptFd(int fd);
+	void addListenFd(int fd);
 	void addEvent(int fd, void* data);
 	void modEvnet(int fd, void* data, bool write);
 	
@@ -36,7 +36,7 @@ public:
 	virtual ~Epoll();
 private:
 	int _efd;
-	int _sockfd;
+	int _listenfd;
 	int _maxevents;
 	epEvent *_events;
 	

@@ -38,9 +38,9 @@ int Epoll::wait(epoll_event * events, int maxevents, int timeout = -1)
 	return ::epoll_wait(_efd, events, maxevents, timeout);
 }
 
-void Epoll::addAcceptFd(int fd)
+void Epoll::addListenFd(int fd)
 {
-	_sockfd = fd;
+	_listenfd = fd;
 }
 
 void Epoll::modEvnet(int fd, void * data, bool write)
@@ -74,18 +74,20 @@ void Epoll::poll()
 		nevent = wait(_events, _maxevents);
 		for (int i = 0; i < nevent; i++)
 		{
-			auto data = static_cast<PollData* >(_events[i].data.ptr);
-			if (data->fd == _sockfd) {
-				Socket s = *static_cast<Socket *>(data->data);
+			auto data = static_cast<SocketData* >(_events[i].data.ptr);
+			if (data->fd == _listenfd) {
+				int  listenfd = data->fd;
+				Socket s(listenfd);
 				sockaddr_in clientaddr;
 				Socket newSock = s.accept(&clientaddr);
 				InetAddr addr(clientaddr);
 				SocketChannle sc(newSock, addr);
+
 				if (_onConnectCallback) {
 					_onConnectCallback(sc);
 				}
 			}
-			else{
+			else if(_events[i].events & EPOLLIN){
 
 			}
 		}
