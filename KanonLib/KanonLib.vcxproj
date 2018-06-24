@@ -70,12 +70,27 @@
   <ItemGroup>
     <ClInclude Include="netLib\Epoll.h" />
     <ClInclude Include="netLib\InetAddr.h" />
+    <ClInclude Include="netLib\KanonNet.h" />
     <ClInclude Include="netLib\Socket.h" />
     <ClInclude Include="netLib\SocketChannel.h" />
     <ClInclude Include="netLib\SocketData.h" />
     <ClInclude Include="netLib\SocketException.h" />
+    <ClInclude Include="threadlLib\SynchronizedQueue.h" />
   </ItemGroup>
-  <ItemDefinitionGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile />
+    <Link>
+      <AdditionalOptions>-pthread %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalOptions>-pthread %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <AdditionalOptions>-pthread %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>

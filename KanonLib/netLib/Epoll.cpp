@@ -19,21 +19,21 @@ void Epoll::del(int fd)
 	}
 }
 
-void Epoll::add(int fd, epoll_event * event)
+void Epoll::add(int fd, epEvent * event)
 {
 	if (epoll_ctl(_efd, EPOLL_CTL_ADD, fd, event) == -1) {
 		throw SocketException("epoll addEvent error:" + std::string(strerror(errno)));
 	}
 }
 
-void Epoll::mod(int fd, epoll_event * event)
+void Epoll::mod(int fd, epEvent * event)
 {
 	if (epoll_ctl(_efd, EPOLL_CTL_MOD, fd, event) == -1) {
 		throw SocketException("epoll addEvent error:" + std::string(strerror(errno)));
 	}
 }
 
-int Epoll::wait(epoll_event * events, int maxevents, int timeout = -1)
+int Epoll::wait(epEvent * events, int maxevents, int timeout = -1)
 {
 	return ::epoll_wait(_efd, events, maxevents, timeout);
 }
@@ -66,9 +66,10 @@ void Epoll::setWriteCallback(callback cb)
 	_onWriteCallback = cb;
 }
 
+
 void Epoll::poll()
 {
-	int nevent;
+	/*int nevent;
 	while (true)
 	{
 		nevent = wait(_events, _maxevents);
@@ -91,7 +92,7 @@ void Epoll::poll()
 
 			}
 		}
-	}
+	}*/
 }
 
 

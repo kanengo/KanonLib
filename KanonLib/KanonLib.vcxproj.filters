@@ -14,5 +14,7 @@
     <ClInclude Include="netLib\SocketChannel.h" />
     <ClInclude Include="netLib\SocketException.h" />
     <ClInclude Include="netLib\SocketData.h" />
+    <ClInclude Include="netLib\KanonNet.h" />
+    <ClInclude Include="threadlLib\SynchronizedQueue.h" />
   </ItemGroup>
 </Project>
