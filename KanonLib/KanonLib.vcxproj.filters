@@ -6,6 +6,7 @@
     <ClCompile Include="netLib\Epoll.cpp" />
     <ClCompile Include="netLib\Socket.cpp" />
     <ClCompile Include="netLib\SocketChannel.cpp" />
+    <ClCompile Include="threadlLib\SynchronizedQueue.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="netLib\Epoll.h" />
