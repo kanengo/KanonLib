@@ -2,6 +2,7 @@
 #include <iostream>
 #include "netLib/KanonNet.h"
 #include <thread>
+#include <vector>
 
 using namespace std;
 
@@ -12,8 +13,7 @@ string task(string msg)
 }
 int main()
 {	
-
-	while (1);
+	int a = int();
 
     return 0;
 }

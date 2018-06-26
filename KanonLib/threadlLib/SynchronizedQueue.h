@@ -11,12 +11,24 @@ template<class T>
 class SynchronizedQueue
 {
 public:
+	
 	SynchronizedQueue(int size, int cacheSize);
-
-	
+	void push(T &data);
+	T pop();
 private:
-	vector<T> _q;
-	
+	class QueueData {
+	public:
+		static const uint8_t WRITE = 1;
+		static const uint8_t READ = 2;
+		
+		T data;
+		QueueData() {
+			flag = WRITE;
+		}
+		uint8_t flag;
+	};
+private:
+	vector<QueueData> _q;
 	list<T> _qc;
 	int _size;
 	int _cachesize;
@@ -24,17 +36,6 @@ private:
 	volatile int _wIdx;
 	atomic_flag _lock = ATOMIC_FLAG_INIT;
 
-	void lock()
-	{
-		while (_lock.test_and_set(memory_order_acquire));
-	}
-
-	void unlock() {
-		_lock.clear();
-	}
+	void lock();
+	void unlock();
 };
-
-template<class T>
-inline SynchronizedQueue<T>::SynchronizedQueue(int size, int cacheSize)
-{
-}
