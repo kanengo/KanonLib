@@ -66,7 +66,7 @@
     <ClCompile Include="netLib\InetAddr.cpp" />
     <ClCompile Include="netLib\Socket.cpp" />
     <ClCompile Include="netLib\SocketChannel.cpp" />
-    <ClCompile Include="threadlLib\SynchronizedQueue.cpp" />
+    <ClCompile Include="threadLib\ThreadPool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="netLib\Epoll.h" />
@@ -76,10 +76,12 @@
     <ClInclude Include="netLib\SocketChannel.h" />
     <ClInclude Include="netLib\SocketData.h" />
     <ClInclude Include="netLib\SocketException.h" />
-    <ClInclude Include="threadlLib\SynchronizedQueue.h" />
+    <ClInclude Include="threadLib\SyncQueue.h" />
+    <ClInclude Include="threadLib\ThreadPool.h" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile />
+    <Link />
     <Link>
       <AdditionalOptions>-pthread %(AdditionalOptions)</AdditionalOptions>
     </Link>

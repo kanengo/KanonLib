@@ -1,21 +1,58 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <ClCompile Include="netLib\Epoll.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="netLib\InetAddr.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="netLib\Socket.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="netLib\SocketChannel.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="netLib\InetAddr.cpp" />
-    <ClCompile Include="netLib\Epoll.cpp" />
-    <ClCompile Include="netLib\Socket.cpp" />
-    <ClCompile Include="netLib\SocketChannel.cpp" />
-    <ClCompile Include="threadlLib\SynchronizedQueue.cpp" />
+    <ClCompile Include="threadLib\ThreadPool.cpp">
+      <Filter>thread</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="netLib\Epoll.h" />
-    <ClInclude Include="netLib\InetAddr.h" />
-    <ClInclude Include="netLib\Socket.h" />
-    <ClInclude Include="netLib\SocketChannel.h" />
-    <ClInclude Include="netLib\SocketException.h" />
-    <ClInclude Include="netLib\SocketData.h" />
-    <ClInclude Include="netLib\KanonNet.h" />
-    <ClInclude Include="threadlLib\SynchronizedQueue.h" />
+    <ClInclude Include="netLib\Epoll.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="netLib\InetAddr.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="netLib\KanonNet.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="netLib\Socket.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="netLib\SocketChannel.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="netLib\SocketData.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="netLib\SocketException.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="threadLib\SyncQueue.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="threadLib\ThreadPool.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="net">
+      <UniqueIdentifier>{56ac05ec-4223-4bf4-a541-18e4332c6c0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thread">
+      <UniqueIdentifier>{eaed9d82-eb43-4e50-b52f-9c73bba3de80}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

@@ -1,9 +1,10 @@
 #pragma once
 #include <string>
-class SocketException {
+
+class SocketException{
 public:
 	SocketException() :_errorCode(errno) {};
-	SocketException(std::string msg) :_msg(msg), _errorCode(errno) {};
+	SocketException(std::string msg) :_msg(std::move(msg)), _errorCode(errno) {};
 	std::string description() {
 		return _msg;
 	}
