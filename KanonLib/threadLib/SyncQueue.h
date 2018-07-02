@@ -37,17 +37,17 @@ private:
 	
 public:
 	SyncQueue(int size = 1024, int cacheSize = 0)
-		:m_capacity(size), m_cachesize(cacheSize), m_qc(list<T>())
+		:m_capacity(size), m_cachesize(cacheSize), m_qc(list<T>()), m_q(vector<QueueData>(m_capacity))
 	{
 		m_count = 0;
 		m_rIdx = 0;
 		m_wIdx = 0;
-		m_q = new QueueData[m_capacity];
+		//m_q = new QueueData[m_capacity];
 	}
 
 	~SyncQueue()
 	{
-		delete m_q;
+		//delete m_q;
 	}
 	
 	bool push_and_wait(const T & ref) {
@@ -70,12 +70,12 @@ public:
 		
 	}
 
-	T& pop_and_wait() {
+	T pop_and_wait() {
 		m_lock.lock();
 		while (empty()) {
 			cvempty.wait(m_lock);
 		}
-		T &ret = _pop();
+		auto ret = _pop();
 		m_lock.unlock();
 		cvfull.notify_all();
 		return ret;
@@ -102,9 +102,6 @@ private:
 			if (ref->counter > 0) {
 				cerr << "push counter > 0 1111111111111111111111~~~~~~~~~~~~~~~~~~~~~~" << ref->counter << ",m_wIdx:" << m_wIdx << ",m_rIdx:" << m_rIdx << endl;
 			}
-			auto rt = ref;
-			auto flag = m_q[m_wIdx].flag;
-			auto nt = m_q[m_wIdx];
 			auto & node = m_q[m_wIdx];
 			node.flag = SyncQueue::READ;
 			node.data = ref;
@@ -122,10 +119,9 @@ private:
 		return false;
 	}
 
-	T& _pop() {
+	T _pop() {
 		if (empty())
 			cerr << "not value reutrn !!!";
-
 		auto &node = m_q[m_rIdx];
 		node.flag = SyncQueue::WRITE;
 		m_rIdx = (m_rIdx + 1) % m_capacity;
@@ -134,15 +130,16 @@ private:
 			_push(m_qc.front());
 			m_qc.pop_front();
 		}
-		if (node.data->counter > 0);
-			//cerr << "counter > 0!!!!!!!!!!!!!!!!!!!!!!!!!!!@@@@@@@@@@@@" << endl;
+		if (node.data->counter > 0)
+			cerr << "counter > 0!!!!!!!!!!!!!!!!!!!!!!!!!!!@@@@@@@@@@@@" << endl;
 		return node.data;
 
 	}
 
 	int m_capacity;
 	int m_cachesize;
-	QueueData * m_q;
+	//QueueData * m_q;
+	vector<QueueData> m_q;
 	list<T> m_qc;
 	volatile int m_rIdx;
 	volatile int m_wIdx;

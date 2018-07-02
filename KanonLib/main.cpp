@@ -96,7 +96,7 @@ private:
 };
 int main()
 {
-	SyncQueue<A*> queue(10000);
+	SyncQueue<A*> queue(65536);
 	vector<thread> threads;
 	atomic_llong readcount;
 	atomic_llong writecount ;
@@ -105,7 +105,7 @@ int main()
 	readcount = 0;
 	writecount = 0;
 	Lock lock;
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 2; i++) {
 		threads.emplace_back([&](int idx) ->void {
 			int i = 0;
 			while (true) {;
@@ -148,7 +148,7 @@ int main()
 				//m[ret->m_id] = true;
 				//lock.unlock();
 				//delete ret;
-				usleep(1000);
+				usleep(1);
 				readcount += 1;
 			}
 		});
@@ -161,9 +161,9 @@ int main()
 
 	while (true) {
 		usleep(1000000);
-		//cout << "read count:" << readcount << ",writecount"<< writecount<< endl;
-		//readcount = 0;
-		//writecount = 0;
+		cout << "read count:" << readcount << ",writecount"<< writecount<< endl;
+		readcount = 0;
+		writecount = 0;
 	}
 
 	//for (int i = 0; i <threads.size(); i++) {
