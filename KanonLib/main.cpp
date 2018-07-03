@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <map>
 #include <stdlib.h>
+#include "threadLib/Lock.h"
 
 using namespace std;
 
@@ -16,12 +17,23 @@ string task(string msg)
 	return msg;
 }
 
+class Test
+{
+public:
+	Test() {
+		cout << "class test ctor"<<endl;
+	}
+	Test(int t) {
+		cout << "class test ctor iiiii" << endl;;
+	}
+};
+
 class A
 {
 public:
 	A(int size = 10, int data = 0, long long id = 0)
 	{	
-		//cout << "A ctor " << endl;
+		cout << "A ctor " << endl;
 		ptr = new int[size];
 		memset(ptr, 0, size);
 		for (int i = 0; i < size; i++)
@@ -83,17 +95,6 @@ public:
 	int counter;
 };
 
-class Lock {
-public:
-	void lock() {
-		while (m_lock.test_and_set(memory_order_acquire));
-	}
-	void unlock() {
-		m_lock.clear();
-	}
-private:
-	atomic_flag m_lock = ATOMIC_FLAG_INIT;
-};
 int main()
 {
 	SyncQueue<A*> queue(65536);
@@ -115,13 +116,13 @@ int main()
 				queue.push_and_wait(p);
 				//usleep(1);
 				writecount += 1;
-				i++;
+				// i++;
 			}	
 		}, i);
 	}
 
 	map<int, bool> m;
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 6; i++) {
 		threads.emplace_back([&]()->void {
 			
 			while (true) {

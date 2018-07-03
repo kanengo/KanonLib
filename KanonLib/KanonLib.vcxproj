@@ -76,6 +76,7 @@
     <ClInclude Include="netLib\SocketChannel.h" />
     <ClInclude Include="netLib\SocketData.h" />
     <ClInclude Include="netLib\SocketException.h" />
+    <ClInclude Include="threadLib\Lock.h" />
     <ClInclude Include="threadLib\SyncQueue.h" />
     <ClInclude Include="threadLib\ThreadPool.h" />
   </ItemGroup>

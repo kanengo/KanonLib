@@ -46,6 +46,9 @@
     <ClInclude Include="threadLib\ThreadPool.h">
       <Filter>thread</Filter>
     </ClInclude>
+    <ClInclude Include="threadLib\Lock.h">
+      <Filter>thread</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="net">
