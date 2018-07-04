@@ -8,6 +8,7 @@
 #include <map>
 #include <stdlib.h>
 #include "threadLib/Lock.h"
+#include <memory>
 
 using namespace std;
 
@@ -33,7 +34,7 @@ class A
 public:
 	A(int size = 10, int data = 0, long long id = 0)
 	{	
-		cout << "A ctor " << endl;
+		// cout << "A ctor " << endl;
 		ptr = new int[size];
 		memset(ptr, 0, size);
 		for (int i = 0; i < size; i++)
@@ -97,7 +98,7 @@ public:
 
 int main()
 {
-	SyncQueue<A*> queue(65536);
+	SyncQueue<shared_ptr<A>> queue(65536);
 	vector<thread> threads;
 	atomic_llong readcount;
 	atomic_llong writecount ;
@@ -109,10 +110,8 @@ int main()
 	for (int i = 0; i < 2; i++) {
 		threads.emplace_back([&](int idx) ->void {
 			int i = 0;
-			while (true) {;
-				auto p = new A(10, 42, incId++);
-				if(p->counter > 0)
-					cerr << "push counter > 0 @@@@@@@@@@@@@@@@~~~~~~~~~~~~~~~~~~~~~~" << p->counter<<endl;
+			while (true) {
+				auto p = make_shared<A>(10, 42, incId++);
 				queue.push_and_wait(p);
 				//usleep(1);
 				writecount += 1;
@@ -136,8 +135,7 @@ int main()
 				
 				//else {
 				ret->counter++;
-					ret->flag = true;
-					delete ret;
+				ret->flag = true;
 				//}
 				//lock.unlock();
 	/*			lock.lock();
