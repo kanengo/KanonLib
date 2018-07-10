@@ -1,7 +1,7 @@
 #pragma once
 #include <atomic>
 #include <vector>
-#include <list>
+// #include <list>
 #include <condition_variable>
 #include "Lock.h"
 
@@ -25,8 +25,8 @@ private:
 	};
 	
 public:
-	SyncQueue(int size = 1024, int cacheSize = 0)
-		:m_capacity(size), m_cachesize(cacheSize)
+	explicit SyncQueue(int size = 1024)
+		:m_capacity(size)
 	{
 		m_count = 0;
 		m_rIdx = 0;
@@ -35,6 +35,15 @@ public:
 		for (int i = 0; i < m_capacity; i++)
 			m_q[i] = new QueueData();
 		//m_q = new QueueData[m_capacity];
+	}
+
+	SyncQueue(SyncQueue&& rhs)
+	{
+		m_capacity = rhs.m_capacity;
+		swap(m_q, rhs.m_q);
+		m_count = 0;
+		m_rIdx = 0;
+		m_wIdx = 0;
 	}
 
 	~SyncQueue()
@@ -121,7 +130,7 @@ private:
 	}
 
 	int m_capacity;
-	int m_cachesize;
+	// int m_cachesize;
 	QueueData ** m_q;
 	//vector<QueueData> m_q;
 	//list<T> m_qc;

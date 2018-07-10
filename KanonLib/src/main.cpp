@@ -1,15 +1,15 @@
 #include <cstdio>
 #include <iostream>
-// #include "netLib/KanonNet.h"
 #include <thread>
-// #include "threadLib/SyncQueue.h"
+#include "SyncQueue.h"
 #include <atomic>
 #include <unistd.h>
 #include <map>
 #include <stdlib.h>
-// #include "threadLib/Lock.h"
+
 #include <memory>
 #include <memory.h>
+#include "ThreadPool.h"
 
 using namespace std;
 
@@ -19,6 +19,7 @@ string task(string msg)
 	return msg;
 }
 
+template<class T>
 class Test
 {
 public:
@@ -34,6 +35,7 @@ class A
 {
 public:
 	A(int size = 10, int data = 0, long long id = 0)
+	// :t(Test<int>())
 	{	
 		// cout << "A ctor " << endl;
 		ptr = new int[size];
@@ -95,10 +97,13 @@ public:
 	long long m_id;
 	bool flag;
 	int counter;
+	SyncQueue<int> queue;
+	// Test<int> t;
 };
 
 int main()
 {
+	// A a;
 	// SyncQueue<shared_ptr<A>> queue(65536);
 	// vector<thread> threads;
 	// atomic_llong readcount;
@@ -171,11 +176,28 @@ int main()
 	//		threads[i].join();
 	//}
 
+	ThreadPool tp(8);
+	tp.commit([](){
+		cout <<"ttttttpppppppppppppp" << endl;
+	});
+
+	// int count = 0;
+	while(1){
+		atomic_llong acount;
+		acount = 0;
+		for(int i = 0 ; i < 10000; i ++){
+			tp.commit([&](int &number){
+				if (acount >= 0)
+					acount += 1;
+			}, i);
+		}
+		usleep(1000000);
+		cout << "acount:" << acount << endl;
+		acount = -1;
+	}
 	// cout << sizeof(queue) << endl;
-	int a = 3;
-	int b = 6;
-	int c = 9;
 	cout << "-------------------------" << endl;
+	// int b = 0;
 	//while (1);
     return 0;
 }

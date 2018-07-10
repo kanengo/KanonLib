@@ -6,18 +6,15 @@
 #include "SyncQueue.h"
 
 using namespace std;
-
+using handler = function<void()>;
 class ThreadPool
 {
   public:
-    using handler = function<void()>;
-    ThreadPool(int poolSize, handler worker = nullptr) 
-        : m_size(poolSize)
-        , m_threads(vector<thread>())
-        , m_queue(SyncQueue<handler>(65536))
+    ThreadPool(int poolSize, int qsize = 1024)
+        : m_size(poolSize), m_threads(vector<thread>()), m_queue(SyncQueue<handler>(qsize))
     {
         m_running = true;
-        for (int i = 0; i < m_threads.size(); i++)
+        for (int i = 0; i < poolSize; i++)
         {
             m_threads.emplace_back([&]()
             {
@@ -35,7 +32,7 @@ class ThreadPool
     {
         if(!m_running)
             throw runtime_error("commit fail, thread pool is stopped");
-        auto task = bind(forward<F>(f), forward<Args>(args));
+        auto task = bind(forward<F>(f), forward<Args>(args)...);
         m_queue.push_and_wait(task);
         
     }
@@ -44,7 +41,7 @@ class ThreadPool
     {   
 
         m_running = false;
-        for(int i = 0; i < m_threads.size(); i++)
+        for(size_t i = 0; i < m_threads.size(); i++)
         {
             if(m_threads[i].joinable())
                 m_threads[i].join();
@@ -53,8 +50,9 @@ class ThreadPool
     }
 
   private:
-    vector<thread> m_threads;
-    SyncQueue<handler> m_queue;
     int m_size;
     bool m_running;
+    vector<thread> m_threads;
+    SyncQueue<handler> m_queue;
+    
 };

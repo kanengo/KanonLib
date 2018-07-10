@@ -14,17 +14,19 @@ CC = g++
 CFLARGS = -g -Wall -I$(DIR_INC)
 
 
-${BIN_TARGET} : ${OBJ} | BIN_DIR
+${BIN_TARGET} : ${OBJ} #| BIN_DIR
+	if [! -d $(DIR_BIN)]; then mkdir ${DIR_BIN}; fi;\
 	${CC} -pthread -o $@ $^
 
-BIN_DIR:
-	mkdir ${DIR_BIN}
+# BIN_DIR:
+# 	if [! -d $(DIR_BIN)]; then mkdir ${DIR_BIN}; fi;
 
-${DIR_OBJ}/%.o : ${DIR_SRC}/%.cpp | OBJ_DIR
-	${CC} ${CFLARGS} -o $@ -c $<
+${DIR_OBJ}/%.o : ${DIR_SRC}/%.cpp #| OBJ_DIR
+	if [! -d $(DIR_OBJ)]; then mkdir ${DIR_OBJ}; fi; \
+	${CC} ${CFLARGS} -o $@ -c $^
 
-OBJ_DIR:
-	mkdir ${DIR_OBJ}
+# OBJ_DIR:
+# 	if [! -d $(DIR_OBJ)]; then mkdir ${DIR_OBJ}; fi;
 	
 	
 # ./bin/kanon : main.o ThreadPool.o
