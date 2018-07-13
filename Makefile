@@ -15,17 +15,25 @@ CFLARGS = -std=c++11 -g -Wall -I$(DIR_INC)
 
 
 ${BIN_TARGET} : ${OBJ} | BIN_DIR
-	${CC} -pthread -o $@ $^
+	${CC} -pthread $^ -o $@
 
 ${DIR_OBJ}/%.o : ${DIR_SRC}/%.cpp | OBJ_DIR
-	${CC} ${CFLARGS} -o $@ -c $<
+	${CC} ${CFLARGS} -fPIC  -o $@ -c $<
 
 BIN_DIR:
-	if [ ! -d $(DIR_BIN) ]; then mkdir ${DIR_BIN}; fi;
+	@if [ ! -d $(DIR_BIN) ]; then mkdir ${DIR_BIN}; fi;
 
 
 OBJ_DIR:
-	if [ ! -d $(DIR_OBJ) ]; then mkdir ${DIR_OBJ}; fi;
+	@if [ ! -d $(DIR_OBJ) ]; then mkdir ${DIR_OBJ}; fi;
+
+#make libso
+# libkanon.so : ${OBJ}
+	# ${CC} -fPIC -shared -pthread -o $@ $^
+
+# ${DIR_OBJ}/%.o : ${DIR_SRC}/%.cpp
+# 	${CC} ${CFLARGS} -fPIC  -o $@ -c $<
+
 	
 
 .PHONY:clean

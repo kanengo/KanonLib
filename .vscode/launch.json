@@ -9,7 +9,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/KanonLib/bin/kanon",
+            "program": "${workspaceFolder}/bin/kanon",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/KanonLib",
