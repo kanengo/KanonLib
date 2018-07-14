@@ -27,9 +27,9 @@ BIN_DIR:
 OBJ_DIR:
 	@if [ ! -d $(DIR_OBJ) ]; then mkdir ${DIR_OBJ}; fi;
 
-#make libso
-# libkanon.so : ${OBJ}
-	# ${CC} -fPIC -shared -pthread -o $@ $^
+# make libso
+# ./lib/libkanon.so : ${OBJ}
+# 	${CC} -fPIC -shared -pthread -o $@ $^
 
 # ${DIR_OBJ}/%.o : ${DIR_SRC}/%.cpp
 # 	${CC} ${CFLARGS} -fPIC  -o $@ -c $<
